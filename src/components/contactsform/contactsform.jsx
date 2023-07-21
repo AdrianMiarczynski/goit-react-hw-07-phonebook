@@ -1,12 +1,12 @@
 // import PropTypes from 'prop-types';
-import { addContact } from 'components/redux/sliceContacts';
 import css from './contactsform.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { nanoid } from 'nanoid';
+import { selectContacts } from 'components/redux/selectors';
+import { addContacts } from 'components/redux/operations';
 
 const ContactsForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts);
+  const contacts = useSelector(selectContacts);
 
   const handlerSubmit = ev => {
     ev.preventDefault();
@@ -14,7 +14,6 @@ const ContactsForm = () => {
     const newContact = {
       name: form.elements.name.value,
       number: form.elements.number.value,
-      id: nanoid(),
     };
     const contactsFilter = contacts.filter(contact =>
       contact.name.toLowerCase().includes(newContact.name.toLowerCase())
@@ -22,7 +21,7 @@ const ContactsForm = () => {
     if (contactsFilter.length !== 0) {
       return alert(`${newContact.name} is already in contacts`);
     }
-    dispatch(addContact(newContact));
+    dispatch(addContacts(newContact));
     form.reset();
   };
   return (
